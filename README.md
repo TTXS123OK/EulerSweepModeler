@@ -10,8 +10,8 @@ EulerSweepModeler is a CAD course project focused on implementing a robust model
    - Make Edge and Vertex (MEV)
    - Make Edge and Face (MEF)
    - Kill Edge Make Ring (KEMR)
-   - Kill Edge Make Edge (KEME)
-   - Kill Edge Make Loop (KEML)
+   - Make Vertex Face Solid (MVFS)
+   - Kill Face Make Ring and Hole (KFMRH)
 
 3. **Sweep Operation**: Extending the Euler operations to implement a sweeping mechanism. This feature allows the generation of 3D models by sweeping a 2D profile (with support for multiple inner loops) along a path.
 
