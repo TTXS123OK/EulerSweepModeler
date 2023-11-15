@@ -2,6 +2,8 @@
 
 #include "HalfEdge.h"
 
+class HalfEdge; // forward declaration
+
 class Face
 {
 public:

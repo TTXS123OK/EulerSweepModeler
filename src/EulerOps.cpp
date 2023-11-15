@@ -29,9 +29,9 @@ HalfEdge *EulerOps::MEV(Vertex *v, double x, double y, double z, Face *f)
     }
 
     // insert the new halfedge
-    new_he1->next = nullptr;
-    current->next = new_he1;
     new_he2->next = current->next;
+    current->next = new_he1;
+    new_he1->next = new_he2;
 
     // update face pointer
     new_he1->face = f;
@@ -61,31 +61,39 @@ Face *EulerOps::MEF(Vertex *v1, Vertex *v2, Face *f)
     Face *new_f = new Face();
     new_f->edge = new_he2;
 
+    // update relationship between new halfedges and existing halfedges
     HalfEdge *current = v1->edge;
+    HalfEdge *v1_prev_he = nullptr;
+    HalfEdge *v2_prev_he = nullptr;
     while (current->vert != v2)
     {
         current = current->next;
-        if (current->vert == v1)
-        {
-            return nullptr;
-        }
     }
-
-    // update relationship between new halfedges and existing halfedges
-    v1->edge->pair->next->pair->next = new_he1;
-    new_he1->next = current->next;
-    current->next = new_he2;
+    v2_prev_he = current;
+    while (current->vert != v1)
+    {
+        current = current->next;
+    }
+    v1_prev_he = current;
+    v1_prev_he->next = new_he1;
+    new_he1->next = v2_prev_he->next;
+    v2_prev_he->next = new_he2;
     new_he2->next = v1->edge;
     v1->edge = new_he1;
 
     // update face pointer
     new_he1->face = f;
     new_he2->face = new_f;
-    HalfEdge* temp = new_he2->next;
-    while (temp != new_he2) {
+    HalfEdge *temp = new_he2->next;
+    while (temp != new_he2)
+    {
         temp->face = new_f;
         temp = temp->next;
     }
 
     return new_f;
+}
+
+void EulerOps::KEMR(HalfEdge *he)
+{
 }
