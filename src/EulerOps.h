@@ -51,5 +51,5 @@ public:
      * @param inner_loop: A collection of vertices or edges defining the inner loop
      * @return: Pointer to the newly created face with a loop
      */
-    static Face *KFMRH(Face *face, const std::vector<Vertex *> &innerLoop);
+    static Face *KFMRH(Face *face, const std::vector<Vertex *> &inner_loop);
 };
