@@ -19,7 +19,7 @@ int main() {
     HalfEdge *he3 = EulerOps::MEV(v3, 0, 3, 0, f_tmp);
     HalfEdge *he3_ = he3->pair;
     Vertex *v4 = he3->vert;
-    Face *f1 = EulerOps::MEF(v1, v4, f_tmp);
+    Face *f1 = EulerOps::MEF(v4, v1, f_tmp);
     HalfEdge *he4 = he3->next;
     HalfEdge *he4_ = he4->pair;
 
@@ -69,7 +69,7 @@ int main() {
     HalfEdge *he16_ = he16->pair;
 
     // Use KEMR to remove tmp edge and make an inner ring
-    Face *r1 = EulerOps::KEMR(he_tmp, f6);
+    Face *r1 = EulerOps::KEMR(he_tmp);
 
     // Use 4 MEV to create 4 inner columns
     HalfEdge *he17 = EulerOps::MEV(v9, 1, 1, 0, f_tmp);
@@ -86,21 +86,21 @@ int main() {
     Vertex *v16 = he20->vert;
 
     // Use 4 MEF to create 4 new faces
-    Face *f7 = EulerOps::MEF(v13, v14, f_tmp);
+    Face *f7 = EulerOps::MEF(v14, v13, f_tmp);
     HalfEdge *he21 = he17->next;
     HalfEdge *he21_ = he21->pair;
-    Face *f8 = EulerOps::MEF(v14, v15, f_tmp);
+    Face *f8 = EulerOps::MEF(v15, v14, f_tmp);
     HalfEdge *he22 = he18->next;
     HalfEdge *he22_ = he22->pair;
-    Face *f9 = EulerOps::MEF(v15, v16, f_tmp);
+    Face *f9 = EulerOps::MEF(v16, v15, f_tmp);
     HalfEdge *he23 = he19->next;
     HalfEdge *he23_ = he23->pair;
-    Face *f10 = EulerOps::MEF(v16, v13, f_tmp);
+    Face *f10 = EulerOps::MEF(v13, v16, f_tmp);
     HalfEdge *he24 = he20->next;
     HalfEdge *he24_ = he24->pair;
 
     // Use KFMRH to remove a face and create an inner ring and a hole
-    Face *r2 = EulerOps::KFMRH(f_tmp, f1);
+    Face *r2 = EulerOps::KFMRH(f_tmp);
 
     std::cout << "f1:" << std::endl;
     printFace(f1);

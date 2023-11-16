@@ -5,144 +5,124 @@ HalfEdge *EulerOps::MEV(Vertex *v, double x, double y, double z, Face *f) {
     Vertex *new_v = new Vertex(x, y, z);
 
     // create two half edges
-    HalfEdge *new_he1 = new HalfEdge();
-    HalfEdge *new_he2 = new HalfEdge();
+    HalfEdge *new_he = new HalfEdge();
+    HalfEdge *new_he_ = new HalfEdge();
 
     // set vertices of half-edges
-    new_he1->vert = new_v;
-    new_he2->vert = v;
-
-    // set pair relationship
-    new_he1->pair = new_he2;
-    new_he2->pair = new_he1;
-    new_he2->next = nullptr;
-    new_he1->next = nullptr;
-
-    // update edge pointer
-    v->edge = new_he1;
-    new_v->edge = new_he2;
+    new_he->vert = new_v;
+    new_he_->vert = v;
 
     // update face pointer
-    new_he1->face = f;
-    new_he2->face = f;
+    new_he->face = f;
+    new_he_->face = f;
 
-    if (!f->edge) {
-        return new_he1;
-    }
+    // set pair relationship
+    new_he->pair = new_he_;
+    new_he_->pair = new_he;
 
-    // find insert vertex
-    HalfEdge *current = f->edge;
-    while (current->vert != v) {
-        current = current->next;
-        if (current == f->edge) {
-            return nullptr;
+    // insert new half-edges
+    if (!v->edge) {
+        new_he->next = new_he_;
+        new_he_->next = new_he;
+        v->edge = new_he;
+        new_v->edge = new_he_;
+        f->edge = new_he;
+    } else {
+        // find the half-edges that ends and start with v1
+        HalfEdge *he, *he_;
+        HalfEdge *current = f->edge;
+        while (current->vert != v) {
+            current = current->next;
         }
+        he = current;
+        he_ = he->next;
+        he->next = new_he;
+        new_he->next = new_he_;
+        new_he_->next = he_;
+        new_v->edge = new_he_;
     }
 
-    // insert the new half-edge
-    current->next = new_he1;
-
-    return new_he1;
+    return new_he;
 }
 
 Face *EulerOps::MEF(Vertex *v1, Vertex *v2, Face *f) {
     // create two half-edges
-    HalfEdge *new_he1 = new HalfEdge();
-    HalfEdge *new_he2 = new HalfEdge();
-
-    // set vertices of two half-edges
-    new_he1->vert = v2;
-    new_he2->vert = v1;
+    HalfEdge *new_he = new HalfEdge();
+    HalfEdge *new_he_ = new HalfEdge();
 
     // set pair relationship
-    new_he1->pair = new_he2;
-    new_he2->pair = new_he1;
+    new_he->pair = new_he_;
+    new_he_->pair = new_he;
+
+    // set vertices of two half-edges
+    new_he->vert = v2;
+    new_he_->vert = v1;
+
+    // find the half-edges that ends and start with v1
+    HalfEdge *he1, *he1_;
+    HalfEdge *current = f->edge;
+    while (current->vert != v1) {
+        current = current->next;
+    }
+    he1 = current;
+    he1_ = he1->next;
+
+    // find the half-edges that ends and start with v2
+    HalfEdge *he2, *he2_;
+    while (current->vert != v2) {
+        current = current->next;
+    }
+    he2 = current;
+    he2_ = he2->next;
+
+    // reconstruct f's edges
+    he1->next = new_he;
+    new_he->next = he2_;
+    current = new_he;
+    do {
+        current->face = f;
+        current = current->next;
+    } while (current != new_he);
+    f->edge = new_he;
 
     // create a new face
     Face *new_f = new Face();
-    new_f->edge = new_he2;
-
-    // update relationship between new half-edges and existing half-edges
-    if (v1->edge) {
-        HalfEdge *current = v1->edge;
-        HalfEdge *v1_prev_he;
-        HalfEdge *v2_prev_he;
-        while (current->next && current->vert != v2) {
-            current = current->next;
-        }
-        v2_prev_he = current;
-        while (current->next && current->vert != v1) {
-            current = current->next;
-        }
-        v1_prev_he = current;
-        v1_prev_he->next = new_he1;
-        new_he1->next = v2_prev_he->next;
-        v2_prev_he->next = new_he2;
-        new_he2->next = v1->edge;
-    }
-    v1->edge = new_he1;
-    v2->edge = new_he2;
-
-    // update face pointer
-    new_he1->face = f;
-    new_he2->face = new_f;
-    HalfEdge *temp = new_he2->next;
-    while (temp != new_he2) {
-        temp->face = new_f;
-        temp = temp->next;
-    }
+    new_f->edge = new_he_;
+    he2->next = new_he_;
+    new_he_->next = he1_;
+    current = new_he_;
+    do {
+        current->face = new_f;
+        current = current->next;
+    } while (current != new_he_);
 
     return new_f;
 }
 
-void EulerOps::KEMR(HalfEdge *he) {
-    // input half-edge or its pair is null
-    if (!he || !he->pair) {
-        return;
-    }
+Face *EulerOps::KEMR(HalfEdge *he) {
 
-    Face *face1 = he->face;
-    Face *face2 = he->pair->face;
+    HalfEdge *he_ = he->pair;
 
-    // invalid faces or both half-edges belong to the same face
-    if (!face1 || !face2 || face1 == face2) {
-        return;
-    }
-
-    // assign all half-edges of face2 to face1
-    HalfEdge *current = he->pair;
-    do {
-        current->face = face1;
+    // from he->next create a new ring
+    Face *new_r = new Face();
+    new_r->edge = he->next;
+    HalfEdge *current = he->next;
+    while (current->next != he_) {
+        current->face = new_r;
         current = current->next;
-    } while (current != he->pair);
+    }
+    current->next = he->next;
 
-    // adjust the neighboring half-edges
-    HalfEdge *he_pair_next = he->pair->next;
-    HalfEdge *he_prev;
-    HalfEdge *he_pair_prev;
-    current = he;
+    // reconstruct face
+    current = he_->next;
     while (current->next != he) {
         current = current->next;
     }
-    he_prev = current;
-    current = he->pair;
-    while (current->next != he->pair) {
-        current = current->next;
-    }
-    he_pair_prev = current;
+    current->next = he_->next;
 
-    he_prev->next = he_pair_next;
-    he_prev->vert->edge = he_pair_next;
-
-    he_pair_prev->next = he->next;
-    he_pair_next->vert->edge = he->next;
-
-    // delete the removed half-edges and clean up memory
-    delete he->pair;
     delete he;
-
-    // delete face2 and clean up memory
-    delete face2;
+    delete he_;
+    return new_r;
 }
 
 Solid *EulerOps::MVFS(double x, double y, double z) {
@@ -159,4 +139,8 @@ Solid *EulerOps::MVFS(double x, double y, double z) {
     new_s->vertices.push_back(new_v);
 
     return new_s;
+}
+
+Face *EulerOps::KFMRH(Face *face_to_kill) {
+    return face_to_kill;
 }

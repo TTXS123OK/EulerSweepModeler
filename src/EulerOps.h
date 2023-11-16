@@ -33,10 +33,9 @@ public:
      * Kill Edge Make Ring (KEMR)
      * Merges two faces into one by removing an edge between them.
      * @param he: Pointer to the half-edge that represents the edge to be removed
-     * @param f: Pointer to the face to make a new ring
      * @return: Pointer to the newly created ring
      */
-    static Face *KEMR(HalfEdge *he, Face *f);
+    static Face *KEMR(HalfEdge *he);
 
     /**
      * Make Vertex Face Solid (MVFS)
@@ -52,8 +51,7 @@ public:
      * Creates a hole within a face by removing the face and creating a new face
      * with the same outer loop but with an additional inner loop.
      * @param face_to_kill: Pointer to the face to be removed
-     * @param face_to_make_hole: Pointer to the face where the hole will be created
-     * @return
+     * @return: Pointer to the newly created ring
      */
-    static Face *KFMRH(Face *face_to_kill, Face *face_to_make_hole);
+    static Face *KFMRH(Face *face_to_kill);
 };
