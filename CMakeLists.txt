@@ -11,6 +11,5 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 add_executable(
     EulerSweepModeler
     src/EulerOps.cpp
-    src/test.cpp
+    src/EulerOpsTest.cpp
 )
-
