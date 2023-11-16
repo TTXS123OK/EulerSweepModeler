@@ -19,3 +19,6 @@ EulerSweepModeler is a CAD course project focused on implementing a robust model
 
 ## Course Assignment
 This project is a part of the CAD course assignment, where the primary goal is to apply theoretical knowledge in computational geometry and computer-aided design to a practical modeling tool. The project emphasizes the implementation of complex geometric operations and 3D visualization techniques in C++.
+
+sudo make cmake g++ apt-get install libglfw3 libglfw3-dev libglew-dev
+sudo apt-get install libglm-dev
