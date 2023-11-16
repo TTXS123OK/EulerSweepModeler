@@ -2,12 +2,13 @@
 
 #include "Vertex.h"
 #include "HalfEdge.h"
-#include "Edge.h"
 #include "Face.h"
 #include "Solid.h"
 
-class EulerOps
-{
+/**
+ * V - E + F = 2(S - H) + R
+ */
+class EulerOps {
 public:
     /**
      * Make Edge and Vertex (MEV)
@@ -32,8 +33,10 @@ public:
      * Kill Edge Make Ring (KEMR)
      * Merges two faces into one by removing an edge between them.
      * @param he: Pointer to the half-edge that represents the edge to be removed
+     * @param f: Pointer to the face to make a new ring
+     * @return: Pointer to the newly created ring
      */
-    static void KEMR(HalfEdge *he);
+    static Face *KEMR(HalfEdge *he, Face *f);
 
     /**
      * Make Vertex Face Solid (MVFS)
@@ -43,13 +46,14 @@ public:
      */
     static Solid *MVFS(double x, double y, double z);
 
+
     /**
      * Kill Face Make Ring and Hole (KFMRH)
      * Creates a hole within a face by removing the face and creating a new face
      * with the same outer loop but with an additional inner loop.
-     * @param face: Pointer to the face where the hole will be created
-     * @param inner_loop: A collection of vertices or edges defining the inner loop
-     * @return: Pointer to the newly created face with a loop
+     * @param face_to_kill: Pointer to the face to be removed
+     * @param face_to_make_hole: Pointer to the face where the hole will be created
+     * @return
      */
-    static Face *KFMRH(Face *face, const std::vector<Vertex *> &inner_loop);
+    static Face *KFMRH(Face *face_to_kill, Face *face_to_make_hole);
 };

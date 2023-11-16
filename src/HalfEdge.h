@@ -1,7 +1,7 @@
 #pragma once
 
 class Vertex; // forward declaration
-#include "Face.h"
+class Face; // forward declaration
 
 class HalfEdge {
 public:
