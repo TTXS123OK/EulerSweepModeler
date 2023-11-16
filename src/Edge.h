@@ -2,8 +2,7 @@
 
 #include "HalfEdge.h"
 
-class Edge
-{
+class Edge {
 public:
     HalfEdge *he1;
     HalfEdge *he2;

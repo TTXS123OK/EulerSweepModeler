@@ -5,8 +5,7 @@
 #include "Vertex.h"
 #include <vector>
 
-class Solid
-{
+class Solid {
 public:
     std::vector<Face *> faces;      // A list of faces in the solid
     std::vector<Edge *> edges;      // A list of edges in the solid

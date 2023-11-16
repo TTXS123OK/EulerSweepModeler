@@ -2,29 +2,27 @@
 #include <iostream>
 
 void printFace(Face *face);
+
 void test_MEV_MEF();
+
 void test_KEMR_MVFS();
 
-int main()
-{
+int main() {
     test_KEMR_MVFS();
     return 0;
 }
 
-void printFace(Face *face)
-{
+void printFace(Face *face) {
     HalfEdge *start = face->edge;
     HalfEdge *current = start;
 
-    do
-    {
+    do {
         std::cout << "Vertex: (" << current->vert->x << ", " << current->vert->y << ", " << current->vert->z << ")\n";
         current = current->next;
     } while (current != start);
 }
 
-void test_MEV_MEF()
-{
+void test_MEV_MEF() {
     // create a triangle face
     Vertex *v1 = new Vertex(0, 0, 0);
     Vertex *v2 = new Vertex(1, 0, 0);
@@ -65,14 +63,11 @@ void test_MEV_MEF()
     printFace(newF);
 }
 
-void test_KEMR_MVFS()
-{
-    // create some vertices
-    Vertex *v1 = new Vertex(0, 0, 0);
-
-    // use MVFS to create a initial face and solid
-    Solid *solid = EulerOps::MVFS(v1->x, v1->y, v1->z);
+void test_KEMR_MVFS() {
+    // use MVFS to create an initial face and solid
+    Solid *solid = EulerOps::MVFS(0, 0, 0);
     Face *f = solid->faces.front();
+    Vertex *v1 = solid->vertices.front();
 
     // use MEV and MEF to create more vertices and edges to form a quadrilateral
     HalfEdge *he1 = EulerOps::MEV(v1, 1, 0, 0, f);
@@ -91,17 +86,14 @@ void test_KEMR_MVFS()
     HalfEdge *current = start;
 
     bool is_edge_removed = true;
-    do
-    {
-        if (current->face != f)
-        {
+    do {
+        if (current->face != f) {
             std::cout << "Error: Not all half-edges are assigned to the same face" << std::endl;
             is_edge_removed = false;
             break;
         }
 
-        if (current == he3 || current == he3->pair)
-        {
+        if (current == he3 || current == he3->pair) {
             std::cout << "Error: The removed edge is still part of the face" << std::endl;
             is_edge_removed = false;
             break;
@@ -110,12 +102,9 @@ void test_KEMR_MVFS()
         current = current->next;
     } while (current != start && current != nullptr);
 
-    if (is_edge_removed)
-    {
+    if (is_edge_removed) {
         std::cout << "KEMR operation successful: Edge removed and faces merged" << std::endl;
-    }
-    else
-    {
+    } else {
         std::cout << "KEMR operation failed" << std::endl;
     }
 }

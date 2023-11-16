@@ -4,8 +4,7 @@
 
 class HalfEdge; // forward declaration
 
-class Face
-{
+class Face {
 public:
     HalfEdge *edge; // part of this face
 

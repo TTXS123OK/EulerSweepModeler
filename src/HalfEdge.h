@@ -3,8 +3,7 @@
 class Vertex; // forward declaration
 #include "Face.h"
 
-class HalfEdge
-{
+class HalfEdge {
 public:
     Vertex *vert;   // end vertex of edge
     HalfEdge *pair; // paired half edge
