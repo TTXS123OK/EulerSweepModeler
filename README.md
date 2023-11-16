@@ -1,10 +1,10 @@
 # EulerSweepModeler
 
 ## Overview
-EulerSweepModeler is a CAD course project focused on implementing a robust modeling tool using the Half-Edge data structure. This tool is designed to perform complex geometric operations based on Euler Operators and provide a sweeping mechanism for generating 3D models from 2D outlines, including those with multiple inner loops. The project also includes realistic graphic rendering of the constructed solid models.
+EulerSweepModeler is a CAD course project focused on implementing a simple modeling tool using the Half-Edge data structure. This tool is designed to perform basic geometric operations based on Euler Operators and provide a sweeping mechanism for generating 3D models from 2D outlines, including those with multiple inner loops. The project also includes realistic graphic rendering of the constructed solid models.
 
 ## Project Contents
-1. **Half-Edge Data Structure Implementation**: Defining nd implementing a half-edge data structure to represent polygonal meshes, particularly suitable for boundary representation models.
+1. **Half-Edge Data Structure Implementation**: Defining and implementing a half-edge data structure to represent polygonal meshes, particularly suitable for boundary representation models.
 
 2. **Basic Euler Operations**: Implementing five fundamental Euler operations to manipulate the half-edge data structure. These operations are essential for building and modifying the geometric models:
    - Make Edge and Vertex (MEV)
